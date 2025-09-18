@@ -12,9 +12,9 @@ const movieRouter = require('./routers/movieRouter');
 const notFound = require('./middlewares/notFound');
 const errorHandler = require('./middlewares/errorHandler');
 
-app.use(express.static('public'));
+app.use(express.static('public'));  
 
-// definisco la rotta base  
+//definisco la rotta base  
 app.get('/', (req, res) => {
     res.send('Rotta base dei miei movies')
 });
