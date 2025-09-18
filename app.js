@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 
 // definisco il numero di porta su cui deve girare l'applicazione
-const port = 300;
+const port = 3000;
 
 // definisco la rotta base  
 app.get('/', (req, res) => {
