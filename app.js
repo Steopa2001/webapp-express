@@ -1,11 +1,12 @@
 //importo express
 const express = require('express');
+const connection = require('./data/db');
 
 //creo l'istanza dell'app attraverso il metodo express che ho importato
 const app = express();
 
 // definisco il numero di porta su cui deve girare l'applicazione
-const port = 3000;
+const port = process.env.PORT;
 
 // definisco la rotta base  
 app.get('/', (req, res) => {
