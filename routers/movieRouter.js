@@ -5,11 +5,13 @@ const express = require('express');
 const router = express.Router();
 
 // importo il controller 
-const bookController = require('../controllers/movieController');
+const movieController = require('../controllers/movieController');
 
 //definizione delle rotte
 //index
-router.get('/', bookController.index);
+router.get('/', movieController.index);
 
 //show
-router.get('/:id', bookController.show);
+router.get('/:id', movieController.show);
+
+module.exports = router;

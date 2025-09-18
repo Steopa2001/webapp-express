@@ -1,17 +1,42 @@
 //importo la connessione al db
-const connection = require('../data/db');
+const connection = require("../data/db");
 
 //index
 const index = (req, res) => {
-    console.log('Metodo index')
+  // creo la query
+  const sql = "SELECT * FROM movies";
+
+  // eseguo la query
+  connection.query(sql, (err, results) => {
+    if (err)
+      return res
+        .status(500)
+        .json({ error: `Errore nell'esecuzione della query: ${err}` });
+
+    res.send(results);
+  });
 };
 
-//show 
+//show
 const show = (req, res) => {
-    console.log('Metodo show')
+  //recupero l'id parametro
+  const { id } = req.params;
+
+  //creo la query
+  const sqlMovie = "SELECT * FROM movies WHERE id = ?";
+
+  //eseguo la query passando ora i parametri
+  connection.query(sqlMovie, [id], (err, resultMovie) => {
+    if (err)
+      return res
+        .status(500)
+        .json({ error: `errore nell'esecuzione della query: ${err}` });
+
+    res.send(resultMovie[0]);
+  });
 };
 
 module.exports = {
-    index,
-    show
-}
+  index,
+  show,
+};
