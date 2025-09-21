@@ -16,7 +16,7 @@ const notFound = require('./middlewares/notFound');
 const errorHandler = require('./middlewares/errorHandler');
 
 //registro il middleware per il cors
-app.use(cors({origin: process.end.FE_APP}))
+app.use(cors({origin: process.env.FE_APP}))
 
 app.use(express.static('public'));  
 
