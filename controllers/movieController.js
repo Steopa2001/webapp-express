@@ -7,8 +7,21 @@ const index = (req, res) => {
   const sql = "SELECT * FROM movies";
   connection.query(sql, (err, results) => {
     if (err) return res.status(500).json({ error: `Errore query: ${err}` });
-    res.json(results);
+    // fix image filename
+    const movies = results.map(m => ({
+      ...m,
+      image: mapImageByTitle[m.title] ?? m.image
+    }));
+    return res.json(movies);
   });
+};
+
+const mapImageByTitle = {
+  "Inception": "inception.jpg",
+  "The Godfather": "the_godfather.jpg",
+  "Titanic": "titanic.jpg",
+  "The Matrix": "matrix.jpg",
+  "Interstellar": "interstellar.jpg",
 };
 
 // GET /movies/:id (dettagli + recensioni)
@@ -37,9 +50,13 @@ const show = (req, res) => {
 
     connection.query(sqlReviews, [id], (err2, reviews) => {
       if (err2) return res.status(500).json({ error: `Errore query: ${err2}` });
-
-      // rispondo con film + recensioni
-      res.json({ ...movie, reviews });
+      // fix image filename
+      const fixedMovie = {
+        ...movie,
+        image: mapImageByTitle[movie.title] ?? movie.image
+      };
+      // usa il movie corretto
+      return res.json({ ...fixedMovie, reviews });
     });
   });
 };
