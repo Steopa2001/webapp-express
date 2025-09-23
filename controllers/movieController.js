@@ -1,4 +1,3 @@
-// controllers/movies.js
 // importo la connessione al db
 const connection = require("../data/db");
 
@@ -8,20 +7,20 @@ const index = (req, res) => {
   connection.query(sql, (err, results) => {
     if (err) return res.status(500).json({ error: `Errore query: ${err}` });
     // fix image filename
-    const movies = results.map(m => ({
+    const movies = results.map((m) => ({
       ...m,
-      image: mapImageByTitle[m.title] ?? m.image
+      image: mapImageByTitle[m.title] ?? m.image,
     }));
     return res.json(movies);
   });
 };
 
 const mapImageByTitle = {
-  "Inception": "inception.jpg",
+  Inception: "inception.jpg",
   "The Godfather": "the_godfather.jpg",
-  "Titanic": "titanic.jpg",
+  Titanic: "titanic.jpg",
   "The Matrix": "matrix.jpg",
-  "Interstellar": "interstellar.jpg",
+  Interstellar: "interstellar.jpg",
 };
 
 // GET /movies/:id (dettagli + recensioni)
@@ -53,7 +52,7 @@ const show = (req, res) => {
       // fix image filename
       const fixedMovie = {
         ...movie,
-        image: mapImageByTitle[movie.title] ?? movie.image
+        image: mapImageByTitle[movie.title] ?? movie.image,
       };
       // usa il movie corretto
       return res.json({ ...fixedMovie, reviews });
@@ -61,4 +60,33 @@ const show = (req, res) => {
   });
 };
 
-module.exports = { index, show };
+// store
+const store = (req, res) => {
+  // recupero i dati della form
+  const { title, director, abstract } = req.body;
+
+  const fileName = `${req.file.filename}`;
+
+  //query di inserimento
+  const query =
+    "INSERT INTO movies (title, director, image, abstract) VALUES (?, ?, ?, ?)";
+
+  // eseguo query
+  connection.query(
+    query,
+    [title, director, fileName, abstract],
+    (err, result) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ error: "Errore durante l'inserimento " + err });
+      }
+      res.status(201).json({
+        result: true,
+        message: 'Libro creato con successo'
+      })
+    }
+  );
+};
+
+module.exports = { index, show, store };
